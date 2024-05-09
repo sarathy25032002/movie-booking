@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Booking System</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* Custom CSS for specific elements */
+      body {
+        background-image: url("dd.jpeg");
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      .card {
+        margin-bottom: 20px;
+      }
+      .time-slots button.selected {
+        background-color: #007bff;
+        color: #fff;
+      }
+      .seat {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        border: 1px solid #007bff;
+        margin: 5px;
+        cursor: pointer;
+        padding: 6px 10px;
+        background-color: white;
+      }
+      .seat.selected {
+        background-color: #007bff;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Login Form -->
+    <div class="container mt-5" id="login-container">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header text-center">
+              <h4 class="fw-bolder">Sign in</h4>
+            </div>
+            <div class="card-body p-5">
+              <div class="form-group">
+                <label for="inputEmailOrPhone">Email or Phone Number</label>
+                <input
+                  type="text"
+                  class="form-control mb-2"
+                  id="inputEmailOrPhone"
+                  placeholder="Enter email or phone number"
+                />
+              </div>
+              <div class="form-group">
+                <label for="inputPassword">Password</label>
+                <input
+                  type="password"
+                  class="form-control mb-4"
+                  id="inputPassword"
+                  placeholder="Password"
+                />
+              </div>
+              <button
+                type="button"
+                class="btn btn-primary w-100"
+                onclick="login()"
+              >
+                Login
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Movie Page (Initially Hidden) -->
+    <div class="container mt-5" id="movie-container" style="display: none">
+      <h1 class="mt-5 text-white">Movie Booking</h1>
+      <!-- Movie Listing -->
+      <div id="movie-list" class="mt-4">
+        <h2 class="text-white">Now Playing</h2>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="card">
+              <img
+                src="jw.jpeg"
+                class="card-img-top"
+                alt="John wick"
+                style="height: 300px; object-fit: cover"
+              />
+              <div class="card-body">
+                <h3 class="card-title">John wick</h3>
+                <p class="card-text"><strong>Genre</strong> : Action</p>
+                <p class="card-text"><strong>Price</strong>: 150rs</p>
+                <div class="time-slots d-flex flex-wrap justify-content-around">
+                  <button
+                    id="time-slot-1"
+                    class="btn btn-outline-primary mr-2 mb-3"
+                    onclick="selectTimeSlot(this, '03:00 PM')"
+                  >
+                    11:00 AM
+                  </button>
+                  <button
+                    id="time-slot-1"
+                    class="btn btn-outline-primary mr-2 mb-3"
+                    onclick="selectTimeSlot(this, '03:00 PM')"
+                  >
+                    03:00 PM
+                  </button>
+                  <button
+                    id="time-slot-2"
+                    class="btn btn-outline-primary mr-2 mb-3"
+                    onclick="selectTimeSlot(this, '07:00 PM')"
+                  >
+                    07:00 PM
+                  </button>
+                  <button
+                    id="time-slot-2"
+                    class="btn btn-outline-primary mr-2 mb-3"
+                    onclick="selectTimeSlot(this, '11:00 PM')"
+                  >
+                    11:00 PM
+                  </button>
+                </div>
+                <div class="d-flex justify-content-center">
+                  <button
+                    id="book-btn"
+                    class="btn btn-primary mt-2 w-75"
+                    style="display: none"
+                    onclick="showSeatSelection()"
+                  >
+                    Book
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Add more movie cards as needed -->
+        </div>
+      </div>
+
+      <!-- Seat Selection -->
+      <div id="seat-selection" class="mt-4 text-center" style="display: none">
+        <h2 class="text-white">Seat Selection</h2>
+        <div id="seat-map">
+          <div class="row">
+            <div class="col">
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-A1"
+                onclick="toggleSeatSelection(this)"
+              >
+                A1
+              </button>
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-A2"
+                onclick="toggleSeatSelection(this)"
+              >
+                A2
+              </button>
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-A3"
+                onclick="toggleSeatSelection(this)"
+              >
+                A3
+              </button>
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-A4"
+                onclick="toggleSeatSelection(this)"
+              >
+                A4
+              </button>
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-A5"
+                onclick="toggleSeatSelection(this)"
+              >
+                A5
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-B1"
+                onclick="toggleSeatSelection(this)"
+              >
+                B1
+              </button>
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-B2"
+                onclick="toggleSeatSelection(this)"
+              >
+                B2
+              </button>
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-B3"
+                onclick="toggleSeatSelection(this)"
+              >
+                B3
+              </button>
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-B4"
+                onclick="toggleSeatSelection(this)"
+              >
+                B4
+              </button>
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-B5"
+                onclick="toggleSeatSelection(this)"
+              >
+                B5
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-B1"
+                onclick="toggleSeatSelection(this)"
+              >
+                C1
+              </button>
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-B2"
+                onclick="toggleSeatSelection(this)"
+              >
+                C2
+              </button>
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-B3"
+                onclick="toggleSeatSelection(this)"
+              >
+                C3
+              </button>
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-B4"
+                onclick="toggleSeatSelection(this)"
+              >
+                C4
+              </button>
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-B5"
+                onclick="toggleSeatSelection(this)"
+              >
+                C5
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-B1"
+                onclick="toggleSeatSelection(this)"
+              >
+                D1
+              </button>
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-B2"
+                onclick="toggleSeatSelection(this)"
+              >
+                D2
+              </button>
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-B3"
+                onclick="toggleSeatSelection(this)"
+              >
+                D3
+              </button>
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-B4"
+                onclick="toggleSeatSelection(this)"
+              >
+                D4
+              </button>
+              <button
+                class="btn btn-outline-primary mb-2 seat"
+                id="seat-B5"
+                onclick="toggleSeatSelection(this)"
+              >
+                D5
+              </button>
+            </div>
+          </div>
+          <!-- Add more rows and seats as needed -->
+        </div>
+        <button
+          id="confirm-booking-btn"
+          class="btn btn-outline-primary mt-3"
+          disabled
+          onclick="confirmBooking()"
+        >
+          Confirm Booking
+        </button>
+      </div>
+
+      <!-- Booking Confirmation Modal -->
+      <div
+        class="modal fade"
+        id="booking-confirmation-modal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="booking-confirmation-modal-label"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="booking-confirmation-modal-label">
+                Booking Confirmation
+              </h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p><strong>Movie</strong> : John wick</p>
+              <p><strong>Showtime</strong>: <span id="showtime"></span></p>
+              <p><strong>Seats</strong>: <span id="selected-seats"></span></p>
+              <p>
+                <strong>Total Amount</strong>: <span id="total-amount"></span>rs
+              </p>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onclick="completeBooking()"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal for No Seats Selected -->
+      <div
+        class="modal fade"
+        id="no-seat-modal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="no-seat-modal-label"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="no-seat-modal-label">Error</h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">Please select at least one seat.</div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal for Booking Success -->
+      <div
+        class="modal fade"
+        id="success-modal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="success-modal-label"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="success-modal-label">Success</h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">Booking confirmed!</div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS (Optional, for Bootstrap components that require JS) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      var selectedTimeSlotButton = null;
+      var isSeatSelected = false;
+
+      function selectTimeSlot(button, showtime) {
+        if (selectedTimeSlotButton) {
+          selectedTimeSlotButton.classList.remove("selected");
+          selectedTimeSlotButton.classList.add("btn-outline-primary");
+        }
+        selectedTimeSlotButton = button;
+        selectedTimeSlotButton.classList.remove("btn-outline-primary");
+        selectedTimeSlotButton.classList.add("btn-primary");
+        document.getElementById("book-btn").style.display = "block";
+        // You can store the selected showtime for further processing if needed
+      }
+
+      function showSeatSelection() {
+        // Hide the movie card and show the seat selection section
+        document.getElementById("movie-list").style.display = "none";
+        document.getElementById("seat-selection").style.display = "block";
+      }
+
+      function toggleSeatSelection(seat) {
+        seat.classList.toggle("selected");
+        isSeatSelected = document.querySelectorAll(".seat.selected").length > 0;
+        document
+          .getElementById("confirm-booking-btn")
+          .classList.remove("btn-outline-primary");
+        document
+          .getElementById("confirm-booking-btn")
+          .classList.add("btn-primary");
+        document.getElementById("confirm-booking-btn").disabled =
+          !isSeatSelected;
+      }
+
+      function confirmBooking() {
+        // Check if any seat is selected
+        var selectedSeats = document.querySelectorAll(".seat.selected");
+        if (selectedSeats.length === 0) {
+          $("#no-seat-modal").modal("show");
+          return;
+        }
+
+        // Implement logic to handle seat selection and calculate total amount
+        var selectedSeatsText = [];
+        selectedSeats.forEach(function (seat) {
+          selectedSeatsText.push(seat.textContent);
+        });
+        var totalAmount = selectedSeats.length * 150; // Assuming each seat costs $10
+        document.getElementById("showtime").innerText =
+          selectedTimeSlotButton.textContent;
+        document.getElementById("selected-seats").innerText =
+          selectedSeatsText.join(", ");
+        document.getElementById("total-amount").innerText =
+          totalAmount.toFixed(2);
+        $("#booking-confirmation-modal").modal("show");
+      }
+
+      function completeBooking() {
+        // Implement logic to complete the booking
+        $("#booking-confirmation-modal").modal("hide");
+        $("#success-modal").modal("show");
+        // Redirect or perform further actions as needed
+      }
+
+      function login() {
+        var emailOrPhone = document
+          .getElementById("inputEmailOrPhone")
+          .value.trim();
+        var password = document.getElementById("inputPassword").value.trim();
+
+        if (!emailOrPhone || !password) {
+          // Display alert using Bootstrap modal
+          $("#login-alert-modal").modal("show");
+        } else {
+          // Hide login form and show movie page
+          document.getElementById("movie-container").style.display = "block";
+          document.getElementById("login-container").style.display = "none";
+        }
+      }
+    </script>
+
+    <!-- Modal for Login Alert -->
+    <div
+      class="modal fade"
+      id="login-alert-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="login-alert-modal-label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="login-alert-modal-label">Error</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">Please fill in all fields.</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
